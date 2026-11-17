@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* Dark when the OS prefers it, unless the page sets data-theme="light"; data-theme="dark" forces it. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:not(:where([data-theme="light"], [data-theme="light"] *)) {
+      @slot;
+    }
+  }
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+}
+
+/* Paper-card palette: grey shell, raised panel, near-black ink, one blue accent. Fonts are bundled
+   from @fontsource (imported in app/layout.tsx), so nothing is fetched from other hosts. */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-page: #ffffff;
+  --color-shell: #f2f2f2;
+  --color-panel: #ffffff;
+  --color-raised: #ffffff;
+  --color-pill: #e6e6e6;
+  --color-pill-hover: #dcdcdc;
+  --color-chip: #f2f2f2;
+  --color-track: #ebebeb;
+  --color-tick: #d4d4d4;
+  --color-line: #dcdcdc;
+  --color-ink: #171717;
+  --color-inverse: #ffffff;
+  --color-muted: #666666;
+  --color-accent: #1f5fff;
+  --color-symbol: #c44a00;
+
+  --shadow-card: 0 0 0 1px rgb(0 0 0 / 0.04), 0 2px 4px rgb(0 0 0 / 0.03), 0 18px 36px -14px rgb(0 0 0 / 0.16),
+    0 48px 80px -40px rgb(0 0 0 / 0.14);
+  --shadow-panel: 0 0 0 1px rgb(0 0 0 / 0.035);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.1), 0 0 0 0.5px rgb(0 0 0 / 0.06);
+}
+
+:root {
+  color-scheme: light;
+
+  @variant dark {
+    color-scheme: dark;
+    --color-page: #0c0c0c;
+    --color-shell: #161616;
+    --color-panel: #1f1f1f;
+    --color-raised: #3a3a3a;
+    --color-pill: #2b2b2b;
+    --color-pill-hover: #363636;
+    --color-chip: #2a2a2a;
+    --color-track: #333333;
+    --color-tick: #474747;
+    --color-line: #383838;
+    --color-ink: #ededed;
+    --color-inverse: #161616;
+    --color-muted: #a3a3a3;
+    --color-accent: #6e9bff;
+    --color-symbol: #ff8a4c;
+
+    --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.06), 0 24px 48px -16px rgb(0 0 0 / 0.7);
+    --shadow-panel: 0 0 0 1px rgb(255 255 255 / 0.05);
+    --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.5), 0 0 0 0.5px rgb(255 255 255 / 0.08);
+  }
+}
+
+/* Hover a character in the password to see its position and spoken name. Pseudo-element text is never
+   selected or copied, so the password copies clean. */
+@media (hover: hover) {
+  .char-tip {
+    position: relative;
+    border-radius: 3px;
+  }
+  .char-tip:hover {
+    background: var(--color-chip);
+  }
+  .char-tip:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    z-index: 10;
+    transform: translateX(-50%);
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: var(--color-ink);
+    color: var(--color-inverse);
+    font: 500 11px/1.4 var(--font-sans);
+    letter-spacing: 0;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+}
+
+/* Length slider: a 4px blue "tape hook" thumb inside a 24px hit area.
+   Range pseudo-elements can't be styled with Tailwind classes. */
+.length-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.length-slider::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+.length-slider::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+.length-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 28px;
+  border: solid transparent;
+  border-width: 0 10px;
+  border-radius: 12px / 2px;
+  background: var(--color-accent) padding-box;
+  cursor: grab;
+}
+.length-slider::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 24px;
+  height: 28px;
+  border: solid transparent;
+  border-width: 0 10px;
+  border-radius: 12px / 2px;
+  background: var(--color-accent) padding-box;
+  cursor: grab;
+}
+.length-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+.length-slider:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+.length-slider:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
